@@ -1,0 +1,61 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Get realtime stock price",
+    "description": "Use this API to get stock prices based on stock ticker symbol",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "Cloud function URL"
+    }
+  ],
+  "paths": {
+    "/get_stock_price": {
+      "get": {
+        "summary": "Get stock price based on stock ticker symbol",
+        "description": "Retrieves realtime stock price for any company based on stock ticker symbol",
+        "operationId": "get_stock_price",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ticker",
+            "description": "stock ticker symbol",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "realtime stock ticker price",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "price": {
+                      "type": "string",
+                      "description": "current stock price"
+                    },
+                    "ticker": {
+                      "type": "string",
+                      "description": "Stock ticker symbol"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid query parameter or missing required parameter"
+          },
+          "404": {
+            "description": "Ticker symbol now found"
+          }
+        }
+      }
+    }
+  }
+}
