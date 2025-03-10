@@ -1,0 +1,100 @@
+openapi: 3.0.2
+info:
+  title: Get Stock Price
+  description: Retrieve real-time stock prices using the Yahoo Finance API.
+  version: 1.0.0
+servers:
+    - url:  # Replace with your Cloud Function URL
+paths:
+  /get_stock_price:
+    get:
+      summary: Get real-time stock price
+      description: Retrieves real-time stock price and historical data for a given stock ticker symbol.
+      operationId: getStockPrice
+      parameters:
+        - in: query
+          name: ticker
+          description: Stock ticker symbol (e.g., AAPL)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response with stock data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  symbol:
+                    type: string
+                    description: Stock ticker symbol
+                  currentPrice:
+                    type: number
+                    format: float
+                    description: Current stock price
+                  timestamp:
+                    type: integer
+                    description: Timestamp of the latest price (Unix timestamp)
+                  historical:
+                    type: object
+                    properties:
+                      timestamps:
+                        type: array
+                        items:
+                          type: integer
+                          description: Unix timestamps for historical data
+                      open:
+                        type: array
+                        items:
+                          type: number
+                          format: float
+                          nullable: true
+                          description: Opening prices
+                      high:
+                        type: array
+                        items:
+                          type: number
+                          format: float
+                          nullable: true
+                          description: High prices
+                      low:
+                        type: array
+                        items:
+                          type: number
+                          format: float
+                          nullable: true
+                          description: Low prices
+                      close:
+                        type: array
+                        items:
+                          type: number
+                          format: float
+                          nullable: true
+                          description: Closing prices
+                      volume:
+                        type: array
+                        items:
+                          type: integer
+                          nullable: true
+                          description: Trading volumes
+        '400':
+          description: Bad request - Missing ticker symbol
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        '500':
+          description: Internal server error or Yahoo Finance API error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
